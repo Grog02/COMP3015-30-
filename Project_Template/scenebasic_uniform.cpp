@@ -10,15 +10,16 @@ using std::cerr;
 using std::endl;
 
 #include "helper/glutils.h"
-
-#include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 using glm::vec3;
 using glm::mat4;
 
 SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.0f, 100, 100) {
-	mesh = ObjMesh::load("media/pig_triangulated.obj", true);
+	//mesh = ObjMesh::load("media/pig_triangulated.obj", true);
+	//mesh = ObjMesh::load("media/pig_hide.obj", true);
+	mesh = ObjMesh::load("media/mountain4.obj", true);
 }
 
 

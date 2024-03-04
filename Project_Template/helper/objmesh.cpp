@@ -30,8 +30,7 @@ void ObjMesh::render() const {
 }
 
 
-std::unique_ptr<ObjMesh> ObjMesh::load( const char * fileName, bool center, bool genTangents ) {
-
+std::unique_ptr<ObjMesh> ObjMesh::load(const char* fileName, bool center, bool genTangents) {
     std::unique_ptr<ObjMesh> mesh(new ObjMesh());
 
     ObjMeshData meshData;
@@ -41,31 +40,30 @@ std::unique_ptr<ObjMesh> ObjMesh::load( const char * fileName, bool center, bool
     meshData.generateNormalsIfNeeded();
 
     // Generate tangents?
-    if( genTangents ) meshData.generateTangents();
+    if (genTangents) meshData.generateTangents();
 
     // Convert to GL format
     GlMeshData glMesh;
     meshData.toGlMesh(glMesh);
 
-    if( center ) glMesh.center(mesh->bbox);
+    // Centering logic removed
 
     // Load into VAO
     mesh->initBuffers(
-            & (glMesh.faces), & glMesh.points, & glMesh.normals,
-            glMesh.texCoords.empty() ? nullptr : (& glMesh.texCoords),
-            glMesh.tangents.empty() ? nullptr : (& glMesh.tangents)
+        &(glMesh.faces), &glMesh.points, &glMesh.normals,
+        glMesh.texCoords.empty() ? nullptr : (&glMesh.texCoords),
+        glMesh.tangents.empty() ? nullptr : (&glMesh.tangents)
     );
 
     cout << "Loaded mesh from: " << fileName
-         << " vertices = " << (glMesh.points.size() / 3)
-         << " triangles = " << (glMesh.faces.size() / 3) 
-		 << endl << "    " << mesh->bbox.toString() << endl;
+        << " vertices = " << (glMesh.points.size() / 3)
+        << " triangles = " << (glMesh.faces.size() / 3)
+        << endl << "    " << mesh->bbox.toString() << endl;
 
     return mesh;
 }
 
-std::unique_ptr<ObjMesh> ObjMesh::loadWithAdjacency( const char * fileName, bool center ) {
-
+std::unique_ptr<ObjMesh> ObjMesh::loadWithAdjacency(const char* fileName, bool center) {
     std::unique_ptr<ObjMesh> mesh(new ObjMesh());
 
     ObjMeshData meshData;
@@ -78,21 +76,21 @@ std::unique_ptr<ObjMesh> ObjMesh::loadWithAdjacency( const char * fileName, bool
     GlMeshData glMesh;
     meshData.toGlMesh(glMesh);
 
-    if( center ) glMesh.center(mesh->bbox);
+    // Centering logic removed
 
     mesh->drawAdj = true;
     glMesh.convertFacesToAdjancencyFormat();
 
     // Load into VAO
     mesh->initBuffers(
-            & (glMesh.faces), & glMesh.points, & glMesh.normals,
-            glMesh.texCoords.empty() ? nullptr : (& glMesh.texCoords),
-            glMesh.tangents.empty() ? nullptr : (& glMesh.tangents)
+        &(glMesh.faces), &glMesh.points, &glMesh.normals,
+        glMesh.texCoords.empty() ? nullptr : (&glMesh.texCoords),
+        glMesh.tangents.empty() ? nullptr : (&glMesh.tangents)
     );
 
     cout << "Loaded mesh from: " << fileName
-         << " vertices = " << (glMesh.points.size() / 3)
-         << " triangles = " << (glMesh.faces.size() / 3) << endl;
+        << " vertices = " << (glMesh.points.size() / 3)
+        << " triangles = " << (glMesh.faces.size() / 3) << endl;
 
     return mesh;
 }

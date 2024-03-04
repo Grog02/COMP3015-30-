@@ -8,6 +8,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "helper/torus.h"
+#include "helper/teapot.h"
 #include "helper/plane.h"
 #include "helper/objmesh.h"
 
@@ -17,9 +18,11 @@
 class SceneBasic_Uniform : public Scene
 {
 private:
-    //Torus torus;
     Plane plane;
-    std::unique_ptr<ObjMesh> mesh;
+    Teapot teapot;
+    //std::unique_ptr<ObjMesh> mesh;
+    float tPrev;
+    float angle;
     GLSLProgram prog;
     void setMatrices();
     void compile();

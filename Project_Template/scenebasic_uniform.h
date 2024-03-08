@@ -11,16 +11,17 @@
 #include "helper/teapot.h"
 #include "helper/plane.h"
 #include "helper/objmesh.h"
-
+#include "helper/cube.h"
 
 
 
 class SceneBasic_Uniform : public Scene
 {
 private:
-    Plane plane;
-    Teapot teapot;
+    //Plane plane;
+    //Teapot teapot;
     //std::unique_ptr<ObjMesh> mesh;
+    Cube cube;
     float tPrev;
     float angle;
     GLSLProgram prog;

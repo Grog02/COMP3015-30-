@@ -19,6 +19,14 @@ uniform struct MaterialInfo{
     float Shininess;
 }Material;
 
+/*
+uniform struct FogInfo{
+    float MaxDist;
+    float MinDist;
+    vec3 Color;
+}Fog;
+*/
+
 const int levels = 50;
 const float scaleFactor = 1.0/levels;
 
@@ -39,6 +47,7 @@ vec3 blinnPhong(vec3 position, vec3 n)
         spec = Material.Ks * pow(max(dot(h, n), 0.0), Material.Shininess);
     }    
     return ambient + (diffuse + spec) * Light.L;
+
 }
 
 
@@ -46,6 +55,8 @@ void main()
 {
     FragColor = vec4(blinnPhong(Position,normalize(Normal)), 1.0);
 }
+
+
 
 
 

@@ -18,9 +18,9 @@
 class SceneBasic_Uniform : public Scene
 {
 private:
-    //Plane plane;
+    Plane plane;
     //Teapot teapot;
-    //std::unique_ptr<ObjMesh> mesh;
+    std::unique_ptr<ObjMesh> mesh;
     Cube cube;
     float tPrev;
     float angle;
@@ -31,11 +31,15 @@ private:
 
 public:
     SceneBasic_Uniform();
-
+    
     void initScene();
     void update( float t );
     void render();
     void resize(int, int);
+    void pressW();
+    void pressA();
+    void pressS();
+    void pressD();
 };
 
 #endif // SCENEBASIC_UNIFORM_H

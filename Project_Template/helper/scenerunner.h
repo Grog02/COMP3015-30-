@@ -11,17 +11,27 @@
 #include <fstream>
 #include <iostream>
 
+
+
 class SceneRunner {
+public:
+    GLFWwindow* window;
 private:
-    GLFWwindow * window;
+    
     int fbw, fbh;
 	bool debug;           // Set true to enable debug messages
 
+    float camSpeed = 2.5f;
+    glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
+    glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 2.0f);
+    
 public:
+    
     SceneRunner(const std::string & windowTitle, int width = WIN_WIDTH, int height = WIN_HEIGHT, int samples = 0) : debug(true) {
         // Initialize GLFW
         if( !glfwInit() ) exit( EXIT_FAILURE );
-
+        
 #ifdef __APPLE__
         // Select OpenGL 4.1
         glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
@@ -34,12 +44,14 @@ public:
         glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-        if(debug) 
-			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        if (debug)
+        {
+            glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+        }
         if(samples > 0) {
             glfwWindowHint(GLFW_SAMPLES, samples);
         }
-
+        
         // Open the window
         window = glfwCreateWindow( WIN_WIDTH, WIN_HEIGHT, windowTitle.c_str(), NULL, NULL );
         if( ! window ) {
@@ -78,9 +90,11 @@ public:
         mainLoop(window, scene);
 
 #ifndef __APPLE__
-		if( debug )
-			glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 1,
-				GL_DEBUG_SEVERITY_NOTIFICATION, -1, "End debug");
+        if (debug)
+        {
+            glDebugMessageInsert(GL_DEBUG_SOURCE_APPLICATION, GL_DEBUG_TYPE_MARKER, 1,
+                GL_DEBUG_SEVERITY_NOTIFICATION, -1, "End debug");
+        }
 #endif
 
 		// Close window and terminate GLFW
@@ -117,17 +131,20 @@ private:
     }
 
     void mainLoop(GLFWwindow * window, Scene & scene) {
-        while( ! glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE) ) {
-            GLUtils::checkForOpenGLError(__FILE__,__LINE__);
-			
+        while (!glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE)) {
+            GLUtils::checkForOpenGLError(__FILE__, __LINE__);
+
             scene.update(float(glfwGetTime()));
             scene.render();
             glfwSwapBuffers(window);
 
             glfwPollEvents();
-			int state = glfwGetKey(window, GLFW_KEY_SPACE);
-			if (state == GLFW_PRESS)
-				scene.animate(!scene.animating());
+            int state = glfwGetKey(window, GLFW_KEY_SPACE);
+            if (state == GLFW_PRESS)
+            {
+                scene.animate(!scene.animating());
+            }
+           
         }
     }
 };

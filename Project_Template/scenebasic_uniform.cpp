@@ -12,22 +12,48 @@ using std::endl;
 #include "helper/glutils.h"
 #include "helper/texture.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include "helper/scenerunner.h"
+
 
 using glm::vec3;
 using glm::vec4;
 using glm::mat3;
 using glm::mat4;
 
+GLuint mountain;
+
+GLuint fire;
+
+float camSpeed = 2.5f;
+glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 Position = glm::vec3(0.0f, 0.0f, 2.0f);
+/*
+float camSpeed = 2.5f;
+glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
+glm::vec3 Position = glm::vec3(0.0f, 0.0f, 2.0f);*/
+//
+
+/*
 SceneBasic_Uniform::SceneBasic_Uniform() :
 	tPrev(0){
 
 	//plane(50.0f, 50.0f, 1, 1),
 	//teapot(14, glm::mat4(1.0f)){
-	// mesh = ObjMesh::load("media/pig_triangulated.obj", true);
-	// mesh = ObjMesh::load("media/pig_hide.obj", true);
-	//mesh = ObjMesh::load("media/small_mountain.obj", true);
+	
+	mesh = ObjMesh::load("media/pig_hide.obj", true);
+	//
 }
+*/
+
+SceneBasic_Uniform::SceneBasic_Uniform() : plane(10.0f, 10.f, 100, 100) {
+	mesh = ObjMesh::load("media/mountain/testing.obj", true);
+	//mesh = ObjMesh::load("media/pig_triangulated.obj", true);
+}
+
 
 void SceneBasic_Uniform::initScene()
 {
@@ -35,25 +61,31 @@ void SceneBasic_Uniform::initScene()
 	glEnable(GL_DEPTH_TEST);
 	model = mat4(1.0f);
 	
-    view = glm::lookAt(vec3(1.0f, 1.25f, 1.25f), vec3(0.0f, 0.2f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+    view = glm::lookAt(vec3(1.0f, 1.25f, 3.25f ), vec3(0.0f, 0.2f, 0.0f), vec3(0.0f, 1.0f, 0.0f));
+
 	//model = glm::rotate(model, glm::radians(-35.0f), vec3(1.0f, 0.0f, 0.0f));
 	//model = glm::rotate(model, glm::radians(15.0f), vec3(0.0f, 1.0f, 0.0f));
-    projection = mat4(1.0f);
+    projection = glm::perspective(45.0, 4.0 / 3.0, 1.0, 50.0);
 	angle = 0.0f;
-
-
+	
+	
 
     //prog.setUniform("Light.Position", view * glm::vec4(5.0f, 5.0f, 2.0f, 1.0f));
     prog.setUniform("Light.L", vec3(1.0f));
     prog.setUniform("Light.La", vec3(0.05f));
-	/*prog.setUniform("Fog.MaxDist", 50.0f);
+	prog.setUniform("ModelMatrix", model);
+	prog.setUniform("ViewMatrix", view);
+	prog.setUniform("ProjectionMatrix", projection);
+
+	prog.setUniform("Fog.MaxDist", 10.0f);
 	prog.setUniform("Fog.MinDist", 1.0f);
-	prog.setUniform("Fog.Color", vec3(0.5f, 0.5f, 0.5f));*/
+	prog.setUniform("Fog.Color", vec3(0.5f, 0.5f, 0.5f));
 
 
-	GLuint texID = Texture::loadTexture("/media/texture/brick1.jpg");
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, texID);
+	mountain = Texture::loadTexture("media/texture/snow_02_diff_2k.jpg");
+	fire = Texture::loadTexture("media/texture/fire.png");
+
+	
 }
 
 void SceneBasic_Uniform::compile()
@@ -71,6 +103,7 @@ void SceneBasic_Uniform::compile()
 
 void SceneBasic_Uniform::update( float t )
 {
+	
 	float deltaT = t - tPrev;
 	if (tPrev == 0.0f)
 	{
@@ -79,6 +112,28 @@ void SceneBasic_Uniform::update( float t )
 	tPrev = t;
 	angle += 0.1f * deltaT;
 	if (angle > glm::two_pi<float>())angle -= glm::two_pi<float>();
+	view = glm::rotate(view, 0.1f * deltaT, glm::vec3(0, 1, 0));
+	prog.setUniform("ViewMatrix", view);
+	//view = glm::lookAt(Position, Position + Orientation, Up);
+	/*
+	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+	{
+		Position += camSpeed * Orientation;
+	}
+	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+	{
+		Position += camSpeed * -glm::normalize(glm::cross(Orientation, Up));
+	}
+	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+	{
+		Position += camSpeed * -Orientation;
+	}
+	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+	{
+		Position += camSpeed * glm::normalize(glm::cross(Orientation, Up));
+	}
+	*/
+
 }
 
 void SceneBasic_Uniform::render()
@@ -96,7 +151,7 @@ void SceneBasic_Uniform::render()
 	model = mat4(1.0f);
 	model = glm::rotate(model, glm::radians(-90.f), vec3(1.0f, 0.0f, 0.0f));
 	setMatrices();
-	cube.render();
+	//cube.render();
 
 		/*float dist = 0.0f;
 
@@ -109,16 +164,30 @@ void SceneBasic_Uniform::render()
 		teapot.render();
 		dist += 7.0f;
 	}*/
-	/*
 
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, fire);
+	prog.setUniform("Material.Kd", vec3(0.1f, 0.1f, 0.1f));
+	prog.setUniform("Material.Ks", vec3(0.1f, 0.1f, 0.1f));
+	prog.setUniform("Material.Ka", vec3(0.9f, 0.9f, 0.9f));
+	prog.setUniform("Material.Shininess", 180.0f);
+	model = mat4(1.0f);
+	model = glm::translate(model, vec3(0.0f, -0.45f, 0.0f));
+	setMatrices();
+	plane.render();
+
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, mountain);
 	prog.setUniform("Material.Kd", vec3(0.7f, 0.7f, 0.7f));
 	prog.setUniform("Material.Ks", vec3(0.0f, 0.0f, 0.0f));
 	prog.setUniform("Material.Ka", vec3(0.2f, 0.2f, 0.2f));
 	prog.setUniform("Material.Shininess", 180.0f);
-
 	model = mat4(1.0f);
+	model = glm::rotate(model, glm::radians(90.f), vec3(0.0f, 1.0f, 0.0f));
 	setMatrices();
-	plane.render();*/
+	mesh -> render();
+	
 }
 
 
@@ -143,3 +212,25 @@ void SceneBasic_Uniform::setMatrices()
 }
 
 
+
+
+
+void SceneBasic_Uniform::pressW()
+{
+	Position += camSpeed * Orientation;
+}
+
+void SceneBasic_Uniform::pressA()
+{
+	Position+= camSpeed * -glm::normalize(glm::cross(Orientation, Up));
+}
+
+void SceneBasic_Uniform::pressS()
+{
+	Position += camSpeed * -Orientation;
+}
+
+void SceneBasic_Uniform::pressD()
+{
+	Position += camSpeed* glm::normalize(glm::cross(Orientation, Up));
+}

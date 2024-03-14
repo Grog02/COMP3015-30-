@@ -21,13 +21,15 @@ private:
     int fbw, fbh;
 	bool debug;           // Set true to enable debug messages
 
+    
+public:
+
     float camSpeed = 2.5f;
     glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 Position = glm::vec3(0.0f, 0.0f, 2.0f);
-    
-public:
-    
+    bool firstClick = true;
+    float camSensitivity = 100.0f;
     SceneRunner(const std::string & windowTitle, int width = WIN_WIDTH, int height = WIN_HEIGHT, int samples = 0) : debug(true) {
         // Initialize GLFW
         if( !glfwInit() ) exit( EXIT_FAILURE );
@@ -144,7 +146,39 @@ private:
             {
                 scene.animate(!scene.animating());
             }
-           
+            
+        if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+        {
+            scene.pressW();
+        }
+        if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+        {
+            scene.pressA();
+        }
+        if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+        {
+            scene.pressS();
+        }
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+        {
+            scene.pressD();
+        }
+        if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+        {
+            scene.pressUp();
+        }
+        if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+        {
+            scene.pressDown();
+        }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+        {
+            scene.mouseClick();
+        }
+        if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
+        {
+            scene.mouseRelease();
+        }
         }
     }
 };

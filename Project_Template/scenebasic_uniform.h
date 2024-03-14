@@ -40,6 +40,10 @@ public:
     void pressA();
     void pressS();
     void pressD();
+    void pressUp();
+    void pressDown();
+    void mouseClick();
+    void mouseRelease();
 };
 
 #endif // SCENEBASIC_UNIFORM_H

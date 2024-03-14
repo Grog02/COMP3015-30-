@@ -26,7 +26,9 @@ GLuint mountain;
 
 GLuint fire;
 
+float deltaT;
 float camSpeed = 2.5f;
+
 glm::vec3 Orientation = glm::vec3(0.0f, 0.0f, -1.0f);
 glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
 glm::vec3 Position = glm::vec3(0.0f, 0.0f, 2.0f);
@@ -77,13 +79,13 @@ void SceneBasic_Uniform::initScene()
 	prog.setUniform("ViewMatrix", view);
 	prog.setUniform("ProjectionMatrix", projection);
 
-	prog.setUniform("Fog.MaxDist", 10.0f);
+	prog.setUniform("Fog.MaxDist", 50.0f);
 	prog.setUniform("Fog.MinDist", 1.0f);
 	prog.setUniform("Fog.Color", vec3(0.5f, 0.5f, 0.5f));
 
 
 	mountain = Texture::loadTexture("media/texture/snow_02_diff_2k.jpg");
-	fire = Texture::loadTexture("media/texture/fire.png");
+	fire = Texture::loadTexture("media/texture/gray_rocks_diff_2k.jpg");
 
 	
 }
@@ -104,7 +106,7 @@ void SceneBasic_Uniform::compile()
 void SceneBasic_Uniform::update( float t )
 {
 	
-	float deltaT = t - tPrev;
+	deltaT = t - tPrev;
 	if (tPrev == 0.0f)
 	{
 		deltaT = 0.0f;
@@ -112,27 +114,11 @@ void SceneBasic_Uniform::update( float t )
 	tPrev = t;
 	angle += 0.1f * deltaT;
 	if (angle > glm::two_pi<float>())angle -= glm::two_pi<float>();
-	view = glm::rotate(view, 0.1f * deltaT, glm::vec3(0, 1, 0));
+	//view = glm::rotate(view, 0.1f * deltaT, glm::vec3(0, 1, 0));
 	prog.setUniform("ViewMatrix", view);
-	//view = glm::lookAt(Position, Position + Orientation, Up);
-	/*
-	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-	{
-		Position += camSpeed * Orientation;
-	}
-	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-	{
-		Position += camSpeed * -glm::normalize(glm::cross(Orientation, Up));
-	}
-	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-	{
-		Position += camSpeed * -Orientation;
-	}
-	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-	{
-		Position += camSpeed * glm::normalize(glm::cross(Orientation, Up));
-	}
-	*/
+	view = glm::lookAt(Position, Position + Orientation, Up);
+	
+	
 
 }
 
@@ -217,20 +203,38 @@ void SceneBasic_Uniform::setMatrices()
 
 void SceneBasic_Uniform::pressW()
 {
-	Position += camSpeed * Orientation;
+	Position += camSpeed * deltaT * Orientation;
 }
 
 void SceneBasic_Uniform::pressA()
 {
-	Position+= camSpeed * -glm::normalize(glm::cross(Orientation, Up));
+	Position+= camSpeed * deltaT * -glm::normalize(glm::cross(Orientation, Up));
 }
 
 void SceneBasic_Uniform::pressS()
 {
-	Position += camSpeed * -Orientation;
+	Position += camSpeed * deltaT * -Orientation;
 }
 
 void SceneBasic_Uniform::pressD()
 {
-	Position += camSpeed* glm::normalize(glm::cross(Orientation, Up));
+	Position += camSpeed* deltaT * glm::normalize(glm::cross(Orientation, Up));
+}
+
+void SceneBasic_Uniform::pressUp()
+{
+	Position += camSpeed * deltaT * Up;
+}
+void SceneBasic_Uniform::pressDown()
+{
+	Position += camSpeed * deltaT * -Up;
+}
+
+void SceneBasic_Uniform::mouseClick()
+{
+
+}
+void SceneBasic_Uniform::mouseRelease()
+{
+	
 }

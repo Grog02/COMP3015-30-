@@ -23,19 +23,20 @@ public:
       Load textures, initialize shaders, etc.
       */
     virtual void initScene() = 0;
-    virtual void pressW() = 0;
+    /*virtual void pressW() = 0;
     virtual void pressA() = 0;
     virtual void pressS() = 0;
     virtual void pressD() = 0;
     virtual void pressUp() = 0;
     virtual void pressDown() = 0;
     virtual void mouseClick() = 0;
-    virtual void mouseRelease() = 0;
+    virtual void mouseRelease() = 0;*/
+    
     /**
       This is called prior to every frame.  Use this
       to update your animation.
       */
-    virtual void update( float t ) = 0;
+    virtual void update(float t, glm::vec3 Orientation, glm::vec3 Position, glm::vec3 Up) = 0;
 
     /**
       Draw your scene.

@@ -18,10 +18,7 @@
 class SceneBasic_Uniform : public Scene
 {
 private:
-    Plane plane;
-    //Teapot teapot;
     std::unique_ptr<ObjMesh> mesh;
-    Cube cube;
     float tPrev;
     float angle;
     GLSLProgram prog;
@@ -33,17 +30,10 @@ public:
     SceneBasic_Uniform();
     
     void initScene();
-    void update( float t );
+    void update( float t, glm::vec3 Orientation, glm::vec3 Position, glm::vec3 Up);
     void render();
     void resize(int, int);
-    void pressW();
-    void pressA();
-    void pressS();
-    void pressD();
-    void pressUp();
-    void pressDown();
-    void mouseClick();
-    void mouseRelease();
+
 };
 
 #endif // SCENEBASIC_UNIFORM_H

@@ -34,5 +34,6 @@ Left Click (hold) - Rotate camera and hides mouse cursor
 Left Click (release) - resets the mouse cursor position to the middle of the window and shows the cursor
 
 # References
-[polyhaven.com/textures](url)
+## [polyhaven.com/textures](url)
+This is where I downloaded my textures from and they are free to download and are not in violation of any General Data Protetion Regulations. 
 

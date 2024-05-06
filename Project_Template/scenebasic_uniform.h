@@ -24,7 +24,10 @@ private:
     GLSLProgram prog;
     void setMatrices();
     void compile();
-    
+    void setupFBO();
+    void pass1();
+    void pass2();
+    GLuint fsQuad, renderTex, fboHandle;
 
 public:
     SceneBasic_Uniform();
